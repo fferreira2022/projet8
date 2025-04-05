@@ -20,20 +20,45 @@ from dotenv import load_dotenv
 # load environment variables
 load_dotenv()
 
-
 # Liste des utilisateurs
 VALID_USERNAME_PASSWORD_PAIRS = {
     'admin': os.environ.get('ADMIN_PASSWORD'),
     'user': os.environ.get('USER_PASSWORD')
 }
 
-# VALID_USERNAME_PASSWORD_PAIRS = {
-#     'admin': 'password123',
-#     'user': 'password456'
-# }
 
 # Chargement des données
 df = pd.read_csv('clients_test_new.csv')
+
+# définir les dataframes pour les graphiques analyse bi-variée
+df_no_id = df.drop(columns=['SK_ID_CURR'])
+x_features = [
+        'CODE_GENDER_M',
+        'NAME_INCOME_TYPE_Businessman', 'NAME_INCOME_TYPE_Commercial_associate',
+        'NAME_INCOME_TYPE_Pensioner', 'NAME_INCOME_TYPE_State_servant',
+        'NAME_INCOME_TYPE_Student', 'NAME_INCOME_TYPE_Unemployed',
+        'NAME_INCOME_TYPE_Working', 'NAME_EDUCATION_TYPE_Academic_degree',
+        'NAME_EDUCATION_TYPE_Higher_education',
+        'NAME_EDUCATION_TYPE_Incomplete_higher',
+        'NAME_EDUCATION_TYPE_Lower_secondary',
+        'LOAN_TYPE_Cash_0_or_Revolving_1', 
+        'REG_REGION_NOT_WORK_REGION']
+
+
+y_features = [
+        'EXT_SOURCE_1', 'EXT_SOURCE_2', 'EXT_SOURCE_3',
+        'DAYS_BIRTH', 'DAYS_EMPLOYED', 'CREDIT_INCOME_PERCENT',
+        'ANNUITY_INCOME_PERCENT', 'CREDIT_TERM', 'AMT_CREDIT', 'AMT_ANNUITY',
+        'AMT_INCOME_TOTAL', 'DAYS_EMPLOYED_PERCENT',
+        'CNT_CHILDREN', 'OWN_CAR_AGE'
+        ]
+
+scatter_plot_vars = [
+        'EXT_SOURCE_1', 'EXT_SOURCE_2', 'EXT_SOURCE_3',
+        'DAYS_BIRTH', 'DAYS_EMPLOYED', 'CREDIT_INCOME_PERCENT',
+        'ANNUITY_INCOME_PERCENT', 'CREDIT_TERM', 'AMT_CREDIT', 'AMT_ANNUITY',
+        'AMT_INCOME_TOTAL', 'DAYS_EMPLOYED_PERCENT',
+        'CNT_CHILDREN', 'OWN_CAR_AGE']
 
 # Initialisation de l'application Dash
 app = Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])  # Utilise le thème Bootstrap
@@ -341,9 +366,87 @@ app.layout = dbc.Container([
             )
         ], width=9, xs=12, sm=12, md=12, lg=9, className="dash-col"),
     ], justify="around", align="start"),
+    html.Hr(),
     # new row
-    
-])
+    dbc.Row([
+        dbc.Col([
+            # Graphique d’analyse bi-variée nuage de points
+            html.Div([
+                html.H3("Analyse bi-variée - Nuage de points"),
+                html.Div([
+                    html.Label("Sélectionner la première variable :", 
+                    **{"aria-label": "Dropdown pour sélectionner la première variable catégorielle pour le graphique en nuage de points"}),
+                    dcc.Dropdown(
+                        id="scatterplot-feature-1",
+                        options=[{"label": col, "value": col} for col in df_no_id[scatter_plot_vars].columns],
+                        value=df_no_id.columns[1]
+                    )
+                ]),
+                html.Div([
+                    html.Label("Sélectionner la deuxième variable :", 
+                    **{"aria-label": "Dropdown pour sélectionner la deuxième variable numérique pour le graphique en nuage de points"}),
+                    dcc.Dropdown(
+                        id="scatterplot-feature-2",
+                        options=[{"label": col, "value": col} for col in df_no_id[scatter_plot_vars].columns],
+                        value=df_no_id.columns[2]
+                    )
+                ]),
+                html.Div(
+                    dcc.Graph(
+                        id="scatterplot-graph",
+                        config={
+                            'responsive': True,
+                            'displayModeBar': True,
+                            'displaylogo': False,
+                            'modeBarButtonsToRemove': ['lasso2d', 'zoomIn2d', 'zoomOut2d'],
+                            'scrollZoom': False
+                        }
+                    ),
+                    **{"aria-label": "Graphique d'analyse bi-variée en nuage de points comparant deux variables"}
+                )
+            ]),
+        ], width=6, xs=12, sm=12, md=12, lg=6, className="dash-col"),  # end of col
+        
+        dbc.Col([
+            # Graphique d’analyse bi-variée, boxplot
+            html.Div([
+                html.H3("Analyse bi-variée - Boxplot"),
+                html.Div([
+                    html.Label("Sélectionner la première variable :", 
+                    **{"aria-label": "Dropdown pour sélectionner la première variable catégorielle pour le boxplot"}),
+                    dcc.Dropdown(
+                        id="boxplot-feature-1",
+                        options=[{"label": col, "value": col} for col in df[x_features].columns],
+                        value=df_no_id.columns[1]
+                    )
+                ]),
+                html.Div([
+                    html.Label("Sélectionner la deuxième variable :", 
+                    **{"aria-label": "Dropdown pour sélectionner la deuxième variable numérique pour le boxplot"}),
+                    dcc.Dropdown(
+                        id="boxplot-feature-2",
+                        options=[{"label": col, "value": col} for col in df[y_features].columns],
+                        value=df_no_id.columns[2]
+                    )
+                ]),
+                html.Div(
+                    dcc.Graph(
+                        id="boxplot-graph",
+                        config={
+                            'responsive': True,
+                            'displayModeBar': True,
+                            'displaylogo': False,
+                            'modeBarButtonsToRemove': ['lasso2d', 'zoomIn2d', 'zoomOut2d'],
+                            'scrollZoom': False
+                        }
+                    ),
+                    **{"aria-label": "Graphique d'analyse bi-variée sous forme de boxplot comparant deux variables"}
+                )
+            ]),  # end of parent div
+        ], width=6, xs=12, sm=12, md=12, lg=6, className="dash-col")  # end of col
+    ], justify="around", align="start"),  # end of row
+
+]) # end of layout
 
 
 
@@ -619,6 +722,43 @@ def update_client_data(n_clicks, client_id, age, days_employed, loan_amount, inc
         return api_output, lime_image
     
     return "", None
+
+
+@callback(
+    Output("scatterplot-graph", "figure"),
+    [Input("scatterplot-feature-1", "value"),
+     Input("scatterplot-feature-2", "value")]
+)
+def update_scatterplot_graph(feature1, feature2):
+    # Récupérer uniquement les colonnes numériques
+    data = df_no_id[scatter_plot_vars]
+    fig = px.scatter(
+        data, 
+        x=feature1, 
+        y=feature2, 
+        title=f"Analyse bi-variée : {feature1} vs {feature2}",
+        opacity=0.7
+    )
+    fig.update_layout(template="plotly_white")
+    return fig
+
+
+
+@callback(
+    Output("boxplot-graph", "figure"),
+    [Input("boxplot-feature-1", "value"),
+     Input("boxplot-feature-2", "value")]
+)
+def update_boxplot_graph(feature1, feature2):
+    # Récupérer uniquement les colonnes numériques
+    fig = px.box(
+        df_no_id, 
+        x=feature1, 
+        y=feature2, 
+        title=f"Analyse bi-variée : {feature1} vs {feature2}",
+    )
+    fig.update_layout(template="plotly_white")
+    return fig
 
 
 # Lancement de l'application
