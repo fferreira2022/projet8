@@ -16,6 +16,7 @@ dotenv==0.9.9
 executing==2.2.0
 Flask==3.0.3
 fonttools==4.57.0
+gunicorn==23.0.0
 idna==3.10
 imageio==2.37.0
 importlib_metadata==8.6.1
