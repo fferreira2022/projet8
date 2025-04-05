@@ -1,0 +1,48 @@
+artifact_path: mlflow_model
+flavors:
+  python_function:
+    env:
+      conda: conda.yaml
+      virtualenv: python_env.yaml
+    loader_module: mlflow.sklearn
+    model_path: model.pkl
+    predict_fn: predict
+    python_version: 3.13.2
+  sklearn:
+    code: null
+    pickled_model: model.pkl
+    serialization_format: cloudpickle
+    sklearn_version: 1.6.1
+is_signature_from_type_hint: false
+mlflow_version: 2.20.3
+model_size_bytes: 3507
+model_uuid: 6bf0728c3e0047bdaf9fdaaf3254d44a
+run_id: 6a092d75528f46c0bf4fbf1cb5f93daf
+signature:
+  inputs: '[{"type": "double", "name": "EXT_SOURCE_1", "required": true}, {"type":
+    "double", "name": "EXT_SOURCE_2", "required": true}, {"type": "double", "name":
+    "EXT_SOURCE_3", "required": true}, {"type": "long", "name": "DAYS_BIRTH", "required":
+    true}, {"type": "double", "name": "DAYS_EMPLOYED_log", "required": true}, {"type":
+    "boolean", "name": "CODE_GENDER_M", "required": true}, {"type": "double", "name":
+    "CREDIT_INCOME_PERCENT_log", "required": true}, {"type": "double", "name": "ANNUITY_INCOME_PERCENT",
+    "required": true}, {"type": "double", "name": "CREDIT_TERM", "required": true},
+    {"type": "double", "name": "AMT_CREDIT", "required": true}, {"type": "double",
+    "name": "AMT_ANNUITY_log", "required": true}, {"type": "double", "name": "AMT_INCOME_TOTAL_log",
+    "required": true}, {"type": "double", "name": "DAYS_EMPLOYED_PERCENT", "required":
+    true}, {"type": "boolean", "name": "NAME_INCOME_TYPE_Businessman", "required":
+    true}, {"type": "boolean", "name": "NAME_INCOME_TYPE_Commercial_associate", "required":
+    true}, {"type": "boolean", "name": "NAME_INCOME_TYPE_Pensioner", "required": true},
+    {"type": "boolean", "name": "NAME_INCOME_TYPE_State_servant", "required": true},
+    {"type": "boolean", "name": "NAME_INCOME_TYPE_Student", "required": true}, {"type":
+    "boolean", "name": "NAME_INCOME_TYPE_Unemployed", "required": true}, {"type":
+    "boolean", "name": "NAME_INCOME_TYPE_Working", "required": true}, {"type": "boolean",
+    "name": "NAME_EDUCATION_TYPE_Academic_degree", "required": true}, {"type": "boolean",
+    "name": "NAME_EDUCATION_TYPE_Higher_education", "required": true}, {"type": "boolean",
+    "name": "NAME_EDUCATION_TYPE_Incomplete_higher", "required": true}, {"type": "boolean",
+    "name": "NAME_EDUCATION_TYPE_Lower_secondary", "required": true}, {"type": "boolean",
+    "name": "NAME_EDUCATION_TYPE_Secondary_secondary_special", "required": true}]'
+  outputs: '[{"type": "long", "name": "TARGET", "required": true}]'
+  params: '[{"name": "model_name", "default": "LogisticRegression", "shape": null,
+    "type": "string"}]'
+type_hint_from_example: false
+utc_time_created: '2025-03-18 10:28:54.817085'

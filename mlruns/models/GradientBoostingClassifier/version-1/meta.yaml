@@ -1,0 +1,14 @@
+aliases: []
+creation_timestamp: 1741719375309
+current_stage: None
+description: ''
+last_updated_timestamp: 1741719375309
+name: GradientBoostingClassifier
+run_id: 9568854f60cc4a09b7a82bcfa626fc35
+run_link: ''
+source: file:///c:/Users/frede/OneDrive/Bureau/Formation%20Data%20Scientist/Projet%207/mlruns/0/9568854f60cc4a09b7a82bcfa626fc35/artifacts/mlflow_model
+status: READY
+status_message: null
+storage_location: file:///c:/Users/frede/OneDrive/Bureau/Formation%20Data%20Scientist/Projet%207/mlruns/0/9568854f60cc4a09b7a82bcfa626fc35/artifacts/mlflow_model
+user_id: null
+version: 1

@@ -1,0 +1,15 @@
+artifact_uri: file:///c:/Users/frede/OneDrive/Bureau/Formation%20Data%20Scientist/Projet%207/mlruns/0/9568854f60cc4a09b7a82bcfa626fc35/artifacts
+end_time: 1741719375340
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 9568854f60cc4a09b7a82bcfa626fc35
+run_name: GradientBoostingClassifier
+run_uuid: 9568854f60cc4a09b7a82bcfa626fc35
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1741718961963
+status: 3
+tags: []
+user_id: frede

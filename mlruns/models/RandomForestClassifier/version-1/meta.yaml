@@ -1,0 +1,14 @@
+aliases: []
+creation_timestamp: 1741709765705
+current_stage: None
+description: ''
+last_updated_timestamp: 1741709765705
+name: RandomForestClassifier
+run_id: b74e326cb9bd42d9b0a8383cbeb4ff25
+run_link: ''
+source: file:///c:/Users/frede/OneDrive/Bureau/Formation%20Data%20Scientist/Projet%207/mlruns/0/b74e326cb9bd42d9b0a8383cbeb4ff25/artifacts/mlflow_model
+status: READY
+status_message: null
+storage_location: file:///c:/Users/frede/OneDrive/Bureau/Formation%20Data%20Scientist/Projet%207/mlruns/0/b74e326cb9bd42d9b0a8383cbeb4ff25/artifacts/mlflow_model
+user_id: null
+version: 1

@@ -1,0 +1,1 @@
+{'classifier__C': 0.01, 'classifier__max_iter': 150, 'classifier__penalty': 'l2', 'classifier__solver': 'liblinear'}

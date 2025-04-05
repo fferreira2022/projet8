@@ -1,0 +1,14 @@
+aliases: []
+creation_timestamp: 1743071546532
+current_stage: Deleted_Internal
+description: ''
+last_updated_timestamp: 1743078993270
+name: GradientBoostingClassifier
+run_id: d6d414195d86478c93fc0f767e65dcc6
+run_link: ''
+source: mlflow-artifacts:/163373811241401120/d6d414195d86478c93fc0f767e65dcc6/artifacts/mlflow_model
+status: READY
+status_message: null
+storage_location: mlflow-artifacts:/163373811241401120/d6d414195d86478c93fc0f767e65dcc6/artifacts/mlflow_model
+user_id: null
+version: 2

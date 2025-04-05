@@ -1,0 +1,15 @@
+artifact_uri: file:///c:/Users/frede/OneDrive/Bureau/Formation%20Data%20Scientist/Projet%207/mlruns/0/6cfeeeee0344460895ec8f78e4cd3fe9/artifacts
+end_time: 1741709310028
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 6cfeeeee0344460895ec8f78e4cd3fe9
+run_name: LogisticRegression
+run_uuid: 6cfeeeee0344460895ec8f78e4cd3fe9
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1741709251955
+status: 3
+tags: []
+user_id: frede
