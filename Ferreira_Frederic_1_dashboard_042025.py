@@ -104,6 +104,8 @@ except FileNotFoundError:
 except Exception as e:
     raise ValueError(f"Erreur lors du chargement du Lime Explainer : {str(e)}")
 
+app.title = "Dashboard - Prêt à dépenser"
+
 app.layout = dbc.Container([
     dbc.Row([
         dbc.Col(
@@ -113,6 +115,25 @@ app.layout = dbc.Container([
             ), 
             width=12, 
             style={'textAlign': 'center'}
+        )
+    ]),
+    html.Hr(),
+    dbc.Row([
+        dbc.Col(
+            # Slider pour la taille du texte
+            html.Div([
+                html.Label("Modifier la taille du texte :", **{"aria-label": "Slider pour changer la taille du texte"}),
+                dcc.Slider(
+                    id='text-size-slider',
+                    min=10,
+                    max=30,
+                    step=2,
+                    value=16,
+                    marks={10: '10px', 20: '20px', 30: '30px'},
+                    tooltip={"placement": "bottom", "always_visible": True}
+                ),
+            ], style={'width': '100%', 'marginBottom': '20px', 'padding': '10px'}), 
+            width=12, style={'textAlign': 'center'}
         )
     ]),
     html.Hr(),
@@ -329,7 +350,7 @@ app.layout = dbc.Container([
             html.Div(
                 dcc.Dropdown(
                     id='feature-dropdown',
-                    options=[{'label': col, 'value': col} for col in df.columns if df[col].dtype in ['float64', 'int64', 'bool']],
+                    options=[{'label': col, 'value': col} for col in df_no_id.columns if df_no_id[col].dtype in ['float64', 'int64', 'bool']],
                     value=df.columns[1]
                 ),
                 **{"aria-label": "Menu déroulant pour sélectionner la variable à comparer"}
@@ -446,7 +467,7 @@ app.layout = dbc.Container([
         ], width=6, xs=12, sm=12, md=12, lg=6, className="dash-col")  # end of col
     ], justify="around", align="start"),  # end of row
 
-]) # end of layout
+], id="main-content") # end of layout
 
 
 
@@ -761,6 +782,27 @@ def update_boxplot_graph(feature1, feature2):
     return fig
 
 
+
+@callback(
+    Output('main-content', 'style'),  # Applique le style à tout le conteneur
+    Input('text-size-slider', 'value')  # Taille choisie par l'utilisateur
+)
+def update_text_size(font_size):
+    return {
+        'font-size': f'{font_size}px',  # Ajuste la taille du texte
+        'line-height': '1.5',           # Espacement entre les lignes
+        # 'color': 'white',               # Conserve un bon contraste
+        # 'background-color': '#2b3035',  # Fond sombre uniforme
+        'padding': '10px'               # Espacement général
+    }
+
+
 # Lancement de l'application
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=8080, debug=False)
+    
+
+
+# # Lancement de l'application
+# if __name__ == '__main__':
+#     app.run(debug=True)
