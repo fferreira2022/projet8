@@ -173,7 +173,7 @@ app.layout = dbc.Container([
                 html.Button(
                     'Prédire', 
                     id='predict-button', 
-                    className='btn btn-outline-dark w-100'
+                    className='btn btn-dark w-100'
                 ),
                 **{"aria-label": "Bouton pour obtenir les prédictions via l'API"}
             ),
@@ -228,13 +228,22 @@ app.layout = dbc.Container([
                     **{"aria-label": "Entrée pour l'âge modifié"}
                 ),
                 html.Div(
-                    html.Label("Nombre de jours en emploi :"),
-                    **{"aria-label": "Champ pour modifier les jours en emploi du client"}
+                    html.Label("Proportion mensualité / montant du prêt:"),
+                    **{"aria-label": "Champ pour modifier la proportion d'une mensualité par rapport au montant total du prêt"}
                 ),
                 html.Div(
-                    dcc.Input(id='modified-days-employed', type='number', 
-                    placeholder="Nombre de jours travaillés", style={'width': '100%'}),
-                    **{"aria-label": "Entrée pour les jours en emploi modifiés"}
+                    dcc.Input(id='modified-credit-term', type='number', 
+                    placeholder="Entrez une proportion", style={'width': '100%'}),
+                    **{"aria-label": "Entrée pour modifier la proportion d'une mensualité par rapport au montant total du prêt"}
+                ),
+                   html.Div(
+                    html.Label("Mensualité du prêt:"),
+                    **{"aria-label": "Champ pour modifier la mensualité du prêt"}
+                ),
+                html.Div(
+                    dcc.Input(id='modified-credit-annuity', type='number', 
+                    placeholder="Entrez une mensualité", style={'width': '100%'}),
+                    **{"aria-label": "Entrée pour modifier le montant des mensualités du prêt"}
                 ),
                 html.Div(
                     html.Label("Montant du prêt (€) :"),
@@ -255,6 +264,15 @@ app.layout = dbc.Container([
                     **{"aria-label": "Entrée pour les revenus modifiés"}
                 ),
                 html.Div(
+                    html.Label("Nombre de jours en emploi :"),
+                    **{"aria-label": "Champ pour modifier les jours en emploi du client"}
+                ),
+                html.Div(
+                    dcc.Input(id='modified-days-employed', type='number', 
+                    placeholder="Nombre de jours travaillés", style={'width': '100%'}),
+                    **{"aria-label": "Entrée pour les jours en emploi modifiés"}
+                ),
+                html.Div(
                     html.Label("Nombre d'enfants :"),
                     **{"aria-label": "Champ pour modifier le nombre d'enfants"}
                 ),
@@ -266,7 +284,7 @@ app.layout = dbc.Container([
             ], style={'display': 'flex', 'flexDirection': 'column', 'gap': '10px'}),
             html.Br(),
             html.Button('Rafraîchir la prédiction', id='refresh-prediction-button', 
-                        className='btn btn-outline-dark w-100', n_clicks=0),
+                        className='btn btn-dark w-100', n_clicks=0),
         ], width=3, xs=12, sm=12, md=12, lg=3, className="dash-col"),
         # new col
         dbc.Col([
@@ -441,7 +459,7 @@ app.layout = dbc.Container([
             html.Div([
                 html.H3("Analyse bi-variée - Boxplot"),
                 html.Div([
-                    html.Label("Sélectionner la variable en abscisse:", 
+                    html.Label("Sélectionner la variable catégorielle en abscisse:", 
                     **{"aria-label": "Dropdown pour sélectionner la variable catégorielle sur l'axe des abscisses du boxplot"}),
                     dcc.Dropdown(
                         id="boxplot-feature-1",
@@ -450,7 +468,7 @@ app.layout = dbc.Container([
                     )
                 ]),
                 html.Div([
-                    html.Label("Sélectionner la deuxième variable :", 
+                    html.Label("Sélectionner la variable quantitative en ordonnée :", 
                     **{"aria-label": "Dropdown pour sélectionner la variable numérique sur l'axe des ordonnées du boxplot"}),
                     dcc.Dropdown(
                         id="boxplot-feature-2",
@@ -474,6 +492,74 @@ app.layout = dbc.Container([
             ]),  # end of parent div
         ], width=6, xs=12, sm=12, md=12, lg=6, className="dash-col")  # end of col
     ], justify="around", align="start"),  # end of row
+    html.Hr(),
+    dbc.Row([
+        dbc.Col(
+            # Définition des variables
+            html.Div([
+                html.H3("Définition des variables :", 
+                        **{"aria-label": "Section qui définit quelques variables utilisées pour entraîner le modèle de classification"}),
+                html.Ul([
+                    html.Li([
+                        html.B("SK_ID_CURR : "), 
+                        "Identifiant unique du client."
+                    ]),
+                     html.Li([
+                        html.B("CODE_GENDER_M : "), 
+                        "Variable booléenne indiquant le sexe du client: Homme si True, Femme si False."
+                    ]),
+                    html.Li([
+                        html.B("DAYS_BIRTH : "), 
+                        "Âge du client au moment de la demande de prêt (en jours)."
+                    ]),
+                    html.Li([
+                        html.B("CREDIT_TERM : "), 
+                        "Correspond à AMT_ANNUITY divisé par AMT_CREDIT, soit la proportion d'une mensualité par rapport au montant total du crédit.",
+                        " L'annuité étant le montant mensuel dû, en divisant AMT_CREDIT par AMT_ANNUITY on obtient la durée du prêt en mois."
+                    ]),
+                    html.Li([
+                        html.B("AMT_CREDIT : "), 
+                        "Montant total du crédit demandé."
+                    ]),
+                     html.Li([
+                        html.B("AMT_ANNUITY : "), 
+                        "Montant à rembourser sur une base mensuelle."
+                    ]),
+                    html.Li([
+                        html.B("AMT_INCOME_TOTAL : "), 
+                        "Revenu annuel total du client."
+                    ]),
+                    html.Li([
+                        html.B("DAYS_EMPLOYED : "), 
+                        "Nombre de jours en emploi au moment de la demande de prêt."
+                    ]),
+                    html.Li([
+                        html.B("CNT_CHILDREN : "), 
+                        "Nombre d'enfants du client."
+                    ]),
+                    html.Li([
+                        html.B("EXT_SOURCE_1, EXT_SOURCE_2, EXT_SOURCE_3 : "), 
+                        "Scores externes utilisés pour évaluer la solvabilité du client."
+                    ]),
+                      html.Li([
+                        html.B("CREDIT_INCOME_PERCENT : "), 
+                        "Pourcentage du montant du crédit par rapport aux revenus du client."
+                    ]),
+                    html.Li([
+                        html.B("ANNUITY_INCOME_PERCENT : "), 
+                        "Pourcentage de l'annuité du prêt par rapport aux revenus du client."
+                    ]),
+                    html.Li([
+                        html.B("DAYS_EMPLOYED_PERCENT : "), 
+                        "Pourcentage de jours en emploi par rapport à l'âge du client."
+                    ])
+                    
+                ]),
+            ], style={'width': '100%', 'marginBottom': '20px', 'padding': '10px'}), 
+            width=12, style={'textAlign': 'left'}
+        )
+    ])
+
 
 ], id="main-content") # end of layout
 
@@ -524,7 +610,7 @@ def display_client_info(client_id):
             html.Span(f"{days_employed}", className="text-black")
         ]),
         html.P([
-            html.Span("Durée du prêt : ", className="text-blue"),
+            html.Span("Proportion mensualité / montant du prêt : ", className="text-blue"),
             html.Span(f"{credit_term}", className="text-black")
         ]),
         html.P([
@@ -678,14 +764,16 @@ def update_comparison_graph(selected_feature, group_filter, client_id, age_toler
      Output('modified-lime-image', 'children')],  # Graphique LIME mis à jour
     [Input('refresh-prediction-button', 'n_clicks')],  # Bouton pour rafraîchir
     [State('client-id-dropdown', 'value'),          # ID du client sélectionné
-     State('modified-age', 'value'),               # Âge modifié
+     State('modified-age', 'value'),     # Âge modifié
+     State('modified-credit-term', 'value'),     # proportion mensualité / montant total du prêt
+     State('modified-credit-annuity', 'value'),     # montant d'une mensualité
+     State('modified-loan-amount', 'value'),   # Montant du prêt modifié
+     State('modified-income', 'value'),  # Revenus modifiés
      State('modified-days-employed', 'value'),     # Jours en emploi modifiés
-     State('modified-loan-amount', 'value'),       # Montant du prêt modifié
-     State('modified-income', 'value'),            # Revenus modifiés
-     State('modified-children', 'value')]          # Nombre d'enfants modifié
+     State('modified-children', 'value')]  # Nombre d'enfants modifié
 )
 
-def update_client_data(n_clicks, client_id, age, days_employed, loan_amount, income, children):
+def update_client_data(n_clicks, client_id, age, credit_term, credit_annuity, loan_amount, income, days_employed, children):
     if n_clicks > 0:  # Exécuter uniquement après un clic sur le bouton
         # Récupérer les données du client sélectionné
         client_data = df[df['SK_ID_CURR'] == client_id].iloc[0].to_dict()
@@ -693,12 +781,16 @@ def update_client_data(n_clicks, client_id, age, days_employed, loan_amount, inc
         # Appliquer les modifications (si une valeur est saisie, elle remplace l'existante)
         if age is not None:
             client_data['DAYS_BIRTH'] = age
-        if days_employed is not None:
-            client_data['DAYS_EMPLOYED'] = days_employed
+        if credit_term is not None:
+            client_data['CREDIT_TERM'] = credit_term
+        if credit_annuity is not None:
+            client_data['AMT_ANNUITY'] = credit_annuity
         if loan_amount is not None:
             client_data['AMT_CREDIT'] = loan_amount
         if income is not None:
             client_data['AMT_INCOME_TOTAL'] = income
+        if days_employed is not None:
+            client_data['DAYS_EMPLOYED'] = days_employed
         if children is not None:
             client_data['CNT_CHILDREN'] = children
 
@@ -765,7 +857,7 @@ def update_scatterplot_graph(feature1, feature2):
         data, 
         x=feature1, 
         y=feature2, 
-        title=f"Analyse bi-variée : {feature1} vs {feature2}",
+        # title=f"Analyse bi-variée : {feature1} vs {feature2}",
         opacity=0.7
     )
     fig.update_traces(
@@ -788,7 +880,7 @@ def update_boxplot_graph(feature1, feature2):
         x=feature1, 
         y=feature2, 
         color=feature1,
-        title=f"Analyse bi-variée : {feature1} vs {feature2}",
+        # title=f"Analyse bi-variée : {feature1} vs {feature2}",
         
     )
     fig.update_layout(template="plotly_white")
@@ -812,7 +904,6 @@ def update_text_size(font_size):
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=8080, debug=False)
     
-
 
 # # Lancement de l'application
 # if __name__ == '__main__':
