@@ -122,7 +122,8 @@ app.layout = dbc.Container([
         dbc.Col(
             # Slider pour la taille du texte
             html.Div([
-                html.Label("Modifier la taille du texte :", **{"aria-label": "Slider pour changer la taille du texte"}),
+                html.Label("Modifier la taille du texte :", 
+                        **{"aria-label": "Slider pour changer la taille du texte du dashboard"}),
                 dcc.Slider(
                     id='text-size-slider',
                     min=10,
@@ -165,20 +166,21 @@ app.layout = dbc.Container([
         # new col
         dbc.Col([
             html.Div(
-                html.H3("Prédictions API"),
-                **{"aria-label": "Section des prédictions API"}
+                html.H3("Probabilité de défaut et statut du prêt"),
+                **{"aria-label": "Section des prédictions renvoyées par l'API"}
             ),
             html.Div(
                 html.Button(
-                    'Obtenir les prédictions', 
+                    'Prédire', 
                     id='predict-button', 
-                    className='btn btn-primary btn-sm w-100'
+                    className='btn btn-outline-dark w-100'
                 ),
                 **{"aria-label": "Bouton pour obtenir les prédictions via l'API"}
             ),
-            html.Div(id='api-output', className='mt-4', **{"aria-label": "Résultats des prédictions de l'API"}),
+            html.Div(id='api-output', className='mt-4', 
+                **{"aria-label": "Résultats des prédictions de l'API : ; probabilité de défaut du client et statut du prêt (Accepté ou refusé"}),
             
-        ], width=2, xs=12, sm=12, md=12, lg=2, 
+        ], width=3, xs=12, sm=12, md=12, lg=3, 
            className="dash-col", 
            style={'margin-top': 0, 'margin-left': 'auto', 'margin-right': 'auto', 'margin-bottom': 'auto',
                 'display': 'flex', 'flexDirection': 'column', 'alignItems': 'stretch'}
@@ -186,7 +188,7 @@ app.layout = dbc.Container([
         dbc.Col([
             html.Div(
                 html.H3("Explication locale (LIME)"),
-                **{"aria-label": "Graphique d'explication locale basé sur LIME"}
+                **{"aria-label": "Graphique d'explication locale basé sur LIME (feature importance locale)"}
             ),
             html.Div(
                 dcc.Loading(
@@ -201,9 +203,9 @@ app.layout = dbc.Container([
                     ],
                     type="circle"
                 ),
-                **{"aria-label": "Chargement en cours pour le graphique LIME"}
+                **{"aria-label": "Chargement en cours pour le graphique LIME (feature importance locale)"}
             )
-        ], width=7, xs=12, sm=12, md=12, lg=7, className="dash-col", 
+        ], width=6, xs=12, sm=12, md=12, lg=6, className="dash-col", 
                 style={'margin-top': 0, 'margin-left': 'auto', 'margin-right': 'auto', 
                     'margin-bottom': 'auto', 'display': 'flex', 'flexDirection': 'column', 'alignItems': 'stretch'}),
     ], justify="around", align="start"),
@@ -221,7 +223,8 @@ app.layout = dbc.Container([
                     **{"aria-label": "Champ pour modifier l'âge du client"}
                 ),
                 html.Div(
-                    dcc.Input(id='modified-age', type='number', placeholder="Entrez l'âge en jours", style={'width': '100%'}),
+                    dcc.Input(id='modified-age', type='number', 
+                    placeholder="Entrez l'âge en jours", style={'width': '100%'}),
                     **{"aria-label": "Entrée pour l'âge modifié"}
                 ),
                 html.Div(
@@ -229,7 +232,8 @@ app.layout = dbc.Container([
                     **{"aria-label": "Champ pour modifier les jours en emploi du client"}
                 ),
                 html.Div(
-                    dcc.Input(id='modified-days-employed', type='number', placeholder="Nombre de jours travaillés", style={'width': '100%'}),
+                    dcc.Input(id='modified-days-employed', type='number', 
+                    placeholder="Nombre de jours travaillés", style={'width': '100%'}),
                     **{"aria-label": "Entrée pour les jours en emploi modifiés"}
                 ),
                 html.Div(
@@ -237,7 +241,8 @@ app.layout = dbc.Container([
                     **{"aria-label": "Champ pour modifier le montant du prêt"}
                 ),
                 html.Div(
-                    dcc.Input(id='modified-loan-amount', type='number', placeholder="Montant du prêt en €", style={'width': '100%'}),
+                    dcc.Input(id='modified-loan-amount', type='number', 
+                    placeholder="Montant du prêt en €", style={'width': '100%'}),
                     **{"aria-label": "Entrée pour le montant du prêt modifié"}
                 ),
                 html.Div(
@@ -245,7 +250,8 @@ app.layout = dbc.Container([
                     **{"aria-label": "Champ pour modifier les revenus annuels du client"}
                 ),
                 html.Div(
-                    dcc.Input(id='modified-income', type='number', placeholder="Revenus annuels en €", style={'width': '100%'}),
+                    dcc.Input(id='modified-income', type='number', 
+                    placeholder="Revenus annuels en €", style={'width': '100%'}),
                     **{"aria-label": "Entrée pour les revenus modifiés"}
                 ),
                 html.Div(
@@ -253,12 +259,14 @@ app.layout = dbc.Container([
                     **{"aria-label": "Champ pour modifier le nombre d'enfants"}
                 ),
                 html.Div(
-                    dcc.Input(id='modified-children', type='number', placeholder="Nombre d'enfants", style={'width': '100%'}),
+                    dcc.Input(id='modified-children', type='number', 
+                    placeholder="Nombre d'enfants", style={'width': '100%'}),
                     **{"aria-label": "Entrée pour le nombre d'enfants modifié"}
                 ),
             ], style={'display': 'flex', 'flexDirection': 'column', 'gap': '10px'}),
             html.Br(),
-            html.Button('Rafraîchir la prédiction', id='refresh-prediction-button', className='btn btn-primary btn-sm w-100', n_clicks=0),
+            html.Button('Rafraîchir la prédiction', id='refresh-prediction-button', 
+                        className='btn btn-outline-dark w-100', n_clicks=0),
         ], width=3, xs=12, sm=12, md=12, lg=3, className="dash-col"),
         # new col
         dbc.Col([
@@ -267,7 +275,7 @@ app.layout = dbc.Container([
                 **{"aria-label": "Résultats mis à jour après modification des variables"}
             ),
             html.Div(id='modified-api-output', **{"aria-label": "Résultats de prédiction mis à jour"})
-        ], width=2, xs=12, sm=12, md=12, lg=2, className="dash-col"),
+        ], width=3, xs=12, sm=12, md=12, lg=3, className="dash-col"),
         # new col
         dbc.Col([
             html.Div(
@@ -275,7 +283,7 @@ app.layout = dbc.Container([
                 **{"aria-label": "Graphique de la feature importance locale mis à jour après modification des variables"}
             ),
             html.Div(id='modified-lime-image', style={'textAlign': 'center'})
-        ], width=7, xs=12, sm=12, md=12, lg=7, className="dash-col")
+        ], width=6, xs=12, sm=12, md=12, lg=6, className="dash-col")
     ]),
     html.Hr(),
     # new row
@@ -287,7 +295,7 @@ app.layout = dbc.Container([
             ),
             html.Div([
                 html.Div(
-                    html.Label("Âge (tolérance en jours) :"),
+                    html.Label("Écart d'âge (tolérance en jours) :"),
                     **{"aria-label": "Label pour tolérance d'âge"}
                 ),
                 html.Div(
@@ -301,7 +309,7 @@ app.layout = dbc.Container([
                     **{"aria-label": "Entrée pour définir la tolérance d'âge en jours"}
                 ),
                 html.Div(
-                    html.Label("Revenus (tolérance en €) :"),
+                    html.Label("Écart de revenus (tolérance en €) :"),
                     **{"aria-label": "Label pour tolérance de revenus"}
                 ),
                 html.Div(
@@ -315,7 +323,7 @@ app.layout = dbc.Container([
                     **{"aria-label": "Entrée pour définir la tolérance de revenus en euros"}
                 ),
                 html.Div(
-                    html.Label("Genre :"),
+                    html.Label("Sexe :"),
                     **{"aria-label": "Label pour le critère de genre"}
                 ),
                 html.Div(
@@ -323,12 +331,12 @@ app.layout = dbc.Container([
                         id='gender-filter',
                         options=[
                             {'label': 'Même sexe', 'value': 'same'},
-                            {'label': 'Hommes et femmes', 'value': 'any'}
+                            {'label': 'Les deux sexes', 'value': 'any'}
                         ],
                         value='same',
                         style={'width': '100%'}
                     ),
-                    **{"aria-label": "Menu déroulant pour sélectionner le filtre de genre"}
+                    **{"aria-label": "Menu déroulant pour sélectionner le filtre de genre, choix entre même sexe et les deux sexes"}
                 )
             ], style={'display': 'flex', 'flexDirection': 'column', 'gap': '10px'})
         ], width=3, xs=12, sm=12, md=12, lg=3, className="dash-col"),
@@ -339,7 +347,7 @@ app.layout = dbc.Container([
             ),
             html.Div(
                 html.H6(
-                    "Description : Cette section permet de comparer les caractéristiques du client sélectionné avec celles de tous les clients ou un groupe similaire."
+            "Cette section permet de comparer les caractéristiques du client sélectionné avec celles de tous les clients ou un groupe similaire."
                 ),
                 **{"aria-label": "Description de la section de comparaison des clients"}
             ),
@@ -358,7 +366,7 @@ app.layout = dbc.Container([
             html.Br(),
             html.Div(
                 html.P("Sélectionnez une option de comparaison"),
-                **{"aria-label": "Instruction pour sélectionner une option de comparaison"}
+                **{"aria-label": "Instruction pour sélectionner une option de comparaison, choix entre tous les clients et clients similaires"}
             ),
             html.Div(
                 dcc.Dropdown(
@@ -395,8 +403,8 @@ app.layout = dbc.Container([
             html.Div([
                 html.H3("Analyse bi-variée - Nuage de points"),
                 html.Div([
-                    html.Label("Sélectionner la première variable :", 
-                    **{"aria-label": "Dropdown pour sélectionner la première variable catégorielle pour le graphique en nuage de points"}),
+                    html.Label("Sélectionner la variable quantitative en abscisse :", 
+                    **{"aria-label": "Dropdown pour sélectionner la variable quantitative sur l'axe des abscisses du nuage de points"}),
                     dcc.Dropdown(
                         id="scatterplot-feature-1",
                         options=[{"label": col, "value": col} for col in df_no_id[scatter_plot_vars].columns],
@@ -404,8 +412,8 @@ app.layout = dbc.Container([
                     )
                 ]),
                 html.Div([
-                    html.Label("Sélectionner la deuxième variable :", 
-                    **{"aria-label": "Dropdown pour sélectionner la deuxième variable numérique pour le graphique en nuage de points"}),
+                    html.Label("Sélectionner la variable quantitative en ordonnée :", 
+                    **{"aria-label": "Dropdown pour sélectionner la seconde variable quantitative sur l'axe des ordonnées du nuage de points"}),
                     dcc.Dropdown(
                         id="scatterplot-feature-2",
                         options=[{"label": col, "value": col} for col in df_no_id[scatter_plot_vars].columns],
@@ -433,8 +441,8 @@ app.layout = dbc.Container([
             html.Div([
                 html.H3("Analyse bi-variée - Boxplot"),
                 html.Div([
-                    html.Label("Sélectionner la première variable :", 
-                    **{"aria-label": "Dropdown pour sélectionner la première variable catégorielle pour le boxplot"}),
+                    html.Label("Sélectionner la variable en abscisse:", 
+                    **{"aria-label": "Dropdown pour sélectionner la variable catégorielle sur l'axe des abscisses du boxplot"}),
                     dcc.Dropdown(
                         id="boxplot-feature-1",
                         options=[{"label": col, "value": col} for col in df[x_features].columns],
@@ -443,7 +451,7 @@ app.layout = dbc.Container([
                 ]),
                 html.Div([
                     html.Label("Sélectionner la deuxième variable :", 
-                    **{"aria-label": "Dropdown pour sélectionner la deuxième variable numérique pour le boxplot"}),
+                    **{"aria-label": "Dropdown pour sélectionner la variable numérique sur l'axe des ordonnées du boxplot"}),
                     dcc.Dropdown(
                         id="boxplot-feature-2",
                         options=[{"label": col, "value": col} for col in df[y_features].columns],
@@ -760,6 +768,9 @@ def update_scatterplot_graph(feature1, feature2):
         title=f"Analyse bi-variée : {feature1} vs {feature2}",
         opacity=0.7
     )
+    fig.update_traces(
+        marker=dict(color='#1900ff')  # Changer la couleur des points
+    )
     fig.update_layout(template="plotly_white")
     return fig
 
@@ -776,7 +787,9 @@ def update_boxplot_graph(feature1, feature2):
         df_no_id, 
         x=feature1, 
         y=feature2, 
+        color=feature1,
         title=f"Analyse bi-variée : {feature1} vs {feature2}",
+        
     )
     fig.update_layout(template="plotly_white")
     return fig
@@ -791,8 +804,6 @@ def update_text_size(font_size):
     return {
         'font-size': f'{font_size}px',  # Ajuste la taille du texte
         'line-height': '1.5',           # Espacement entre les lignes
-        # 'color': 'white',               # Conserve un bon contraste
-        # 'background-color': '#2b3035',  # Fond sombre uniforme
         'padding': '10px'               # Espacement général
     }
 
