@@ -755,7 +755,9 @@ def update_comparison_graph(selected_feature, group_filter, client_id, age_toler
         line_dash="dot",
         line_color="red",
         line_width=3,
-        annotation_text="Client sélectionné"
+        annotation_text="Client sélectionné",
+        annotation_position="top",  # Positionnement de l'annotation
+        annotation_font=dict(size=16, color="black", family="Arial black"), 
     )
     return fig
 
