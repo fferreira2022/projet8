@@ -7,11 +7,11 @@ import pandas as pd
 import plotly.express as px
 from lime.lime_tabular import LimeTabularExplainer
 from dash import Dash, html, dcc, callback, Output, Input, State
-import base64  # pour encoder les images en base64 pour Dash
+import base64  # encoder les images en base64 pour Dash
 import dash_bootstrap_components as dbc
 
 import matplotlib
-matplotlib.use('Agg')  # Change le backend de Matplotlib
+matplotlib.use('Agg') 
 
 import os
 import dash_auth
@@ -598,35 +598,35 @@ def display_client_info(client_id):
     # Retourner les informations formatées avec des classes CSS
     return html.Div([
         html.P([
-            html.Span("Âge du client en jours au moment du prêt : ", className="text-blue"),
+            html.Span("Âge du client en jours au moment du prêt : ", className="text-red"),
             html.Span(f"{age_in_days}", className="text-black")
         ]),
         html.P([
-            html.Span("Sexe : ", className="text-blue"),
+            html.Span("Sexe : ", className="text-red"),
             html.Span(f"{gender}", className="text-black")
         ]),
         html.P([
-            html.Span("Nombre de jours en emploi : ", className="text-blue"),
+            html.Span("Nombre de jours en emploi : ", className="text-red"),
             html.Span(f"{days_employed}", className="text-black")
         ]),
         html.P([
-            html.Span("Proportion mensualité / montant du prêt : ", className="text-blue"),
+            html.Span("Proportion mensualité / montant du prêt : ", className="text-red"),
             html.Span(f"{credit_term}", className="text-black")
         ]),
         html.P([
-            html.Span("Montant du prêt en € : ", className="text-blue"),
+            html.Span("Montant du prêt en € : ", className="text-red"),
             html.Span(f"{amt_credit}", className="text-black")
         ]),
         html.P([
-            html.Span("Montant d'une mensualité en €: ", className="text-blue"),
+            html.Span("Montant d'une mensualité en €: ", className="text-red"),
             html.Span(f"{amt_annuity}", className="text-black")
         ]),
         html.P([
-            html.Span("Revenus annuels en € : ", className="text-blue"),
+            html.Span("Revenus annuels en € : ", className="text-red"),
             html.Span(f"{income_total}", className="text-black")
         ]),
         html.P([
-            html.Span("Nombre d'enfants : ", className="text-blue"),
+            html.Span("Nombre d'enfants : ", className="text-red"),
             html.Span(f"{cnt_children}", className="text-black")
         ])
 ])
