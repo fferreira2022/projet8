@@ -654,7 +654,7 @@ def get_predictions_and_lime_graph(n_clicks, client_id):
         threshold = prediction.get("threshold")
         
         # Déterminer la couleur du texte selon le statut
-        color = "green" if status == "Accepté" else "red"
+        color = "#198754" if status == "Accepté" else "#d10000"
         
         # Résultat des prédictions
         api_output = html.Div([
