@@ -754,10 +754,9 @@ def update_comparison_graph(selected_feature, group_filter, client_id, age_toler
         x=client_value,
         line_dash="dot",
         line_color="red",
-        line_width=3,
+        line_width=4,
         annotation_text="Client sélectionné",
-        annotation_position="top",  # Positionnement de l'annotation
-        annotation_font=dict(size=16, color="black", family="Arial black"), 
+        annotation_font=dict(color="black", family="Arial black"), 
     )
     return fig
 
@@ -806,7 +805,7 @@ def update_client_data(n_clicks, client_id, age, credit_term, credit_annuity, lo
         probability = prediction.get("probability", "N/A")
         status = prediction.get("status", "N/A")
         threshold = prediction.get("threshold", "N/A")
-        color = "green" if status == "Accepté" else "red"
+        color = "#198754" if status == "Accepté" else "#d10000"
         
         # Résultats des prédictions
         api_output = html.Div([
