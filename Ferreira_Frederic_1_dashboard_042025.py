@@ -754,6 +754,7 @@ def update_comparison_graph(selected_feature, group_filter, client_id, age_toler
         x=client_value,
         line_dash="dot",
         line_color="red",
+        line_width=3,
         annotation_text="Client sélectionné"
     )
     return fig
