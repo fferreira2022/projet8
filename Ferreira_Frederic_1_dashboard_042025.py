@@ -143,8 +143,8 @@ app.layout = dbc.Container([
     dbc.Row([
         dbc.Col([
             html.Div(
-                html.H3("Informations du client"),
-                **{"aria-label": "Informations client"}
+                html.H3("Informations client"),
+                **{"aria-label": "Section d'informations sur un client à sélectionner"}
             ),
             html.Div(
                 html.P("Sélectionnez un ID client"),
