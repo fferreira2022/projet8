@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import plotly.express as px
+import plotly.graph_objects as go
 from lime.lime_tabular import LimeTabularExplainer
 from dash import Dash, html, dcc, callback, Output, Input, State
 import base64  # encoder les images en base64 pour Dash
@@ -30,8 +31,11 @@ VALID_USERNAME_PASSWORD_PAIRS = {
 # chargement des données
 df = pd.read_csv('clients_test_new.csv')
 
-# définir les dataframes pour les graphiques d'analyse bi-variée
+# définir un dataframe à utiliser pour les graphiques d'analyse bi-variée
 df_no_id = df.drop(columns=['SK_ID_CURR'])
+df_no_id['LOAN_TYPE_Cash_0_or_Revolving_1'] = df_no_id['LOAN_TYPE_Cash_0_or_Revolving_1'].astype(str)
+df_no_id['REG_REGION_NOT_WORK_REGION'] = df_no_id['REG_REGION_NOT_WORK_REGION'].astype(bool)
+
 x_features = [
         'CODE_GENDER_M',
         'NAME_INCOME_TYPE_Businessman', 'NAME_INCOME_TYPE_Commercial_associate',
@@ -565,6 +569,10 @@ app.layout = dbc.Container([
                     html.Li([
                         html.B("DAYS_EMPLOYED_PERCENT : "), 
                         "Pourcentage de jours en emploi par rapport à l'âge du client."
+                    ]),
+                     html.Li([
+                        html.B("REG_REGION_NOT_WORK_REGION: "), 
+                        "True si le client réside dans une région différente de celle où il travaille, False sinon."
                     ])
                     
                 ]),
@@ -903,17 +911,17 @@ def update_scatterplot_graph(feature1, feature2):
     [Input("boxplot-feature-1", "value"),
      Input("boxplot-feature-2", "value")]
 )
+
 def update_boxplot_graph(feature1, feature2):
-    # Récupérer uniquement les colonnes numériques
     fig = px.box(
         df_no_id, 
         x=feature1, 
         y=feature2, 
         color=feature1,
         # title=f"Analyse bi-variée : {feature1} vs {feature2}",
-        
     )
     fig.update_layout(template="plotly_white")
+    
     return fig
 
 
