@@ -218,7 +218,7 @@ app.layout = dbc.Container([
     dbc.Row([
         dbc.Col([
             html.Div(
-                html.H3("Modifier certaines variables pour rafraîchir les prédictions"),
+                html.H3("Modifier certaines variables"),
                 **{"aria-label": "Section pour modifier les variables d'un dossier client existant"}
             ),
             html.Div([
@@ -303,7 +303,7 @@ app.layout = dbc.Container([
         # graphique lime rafraîchi
         dbc.Col([
             html.Div(
-                html.H3("Explication locale (LIME) après modifications"),
+                html.H3("Explication locale (LIME) rafraîchie"),
                 **{"aria-label": "Graphique de la feature importance locale mis à jour après modification des variables"}
             ),
             html.Div(id='modified-lime-image', style={'textAlign': 'center'})
