@@ -17,20 +17,20 @@ import os
 import dash_auth
 from dotenv import load_dotenv
 
-# load environment variables
+# charger les variables d'environnement
 load_dotenv()
 
-# Liste des utilisateurs
+# liste des utilisateurs ayant accès au dashboard
 VALID_USERNAME_PASSWORD_PAIRS = {
     'admin': os.environ.get('ADMIN_PASSWORD'),
     'user': os.environ.get('USER_PASSWORD')
 }
 
 
-# Chargement des données
+# chargement des données
 df = pd.read_csv('clients_test_new.csv')
 
-# définir les dataframes pour les graphiques analyse bi-variée
+# définir les dataframes pour les graphiques d'analyse bi-variée
 df_no_id = df.drop(columns=['SK_ID_CURR'])
 x_features = [
         'CODE_GENDER_M',
@@ -63,18 +63,18 @@ scatter_plot_vars = [
 # Initialisation de l'application Dash
 app = Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])  # Utilise le thème Bootstrap
 
-# Définition de la clé secrète Flask
-app.server.secret_key = os.environ.get('SECRET_KEY')  # Remplace par une clé forte et unique
+# définition de la clé secrète
+app.server.secret_key = os.environ.get('SECRET_KEY')
 
-# Ajout de l'authentification au Dash
+# ajout de l'authentification au tableau de bord Dash
 auth = dash_auth.BasicAuth(
     app,
     VALID_USERNAME_PASSWORD_PAIRS
 )
 
-# Clé API et URL de l'API Django
+# Clé API et URL de l'API django
 API_URL = "https://projet7-production.up.railway.app/predict/"
-API_KEY = "hkih8+0qk7hk2dl*!gg*rrl89@14hh4!*z"
+API_KEY = os.environ.get('API_KEY')
 
 # Charger le modèle sauvegardé 
 MODEL_PATH = "./mlartifacts/406813215569809067/f805d569705e46e4984d8f5a44d80118/artifacts/mlflow_model/model.pkl"
@@ -104,7 +104,8 @@ except FileNotFoundError:
 except Exception as e:
     raise ValueError(f"Erreur lors du chargement du Lime Explainer : {str(e)}")
 
-app.title = "Dashboard - Prêt à dépenser"
+# Titre de page
+app.title = "Dashboard interactif - Prêt à dépenser"
 
 app.layout = dbc.Container([
     dbc.Row([
@@ -120,7 +121,7 @@ app.layout = dbc.Container([
     html.Hr(),
     dbc.Row([
         dbc.Col(
-            # Slider pour la taille du texte
+            # Slider pour ajuster la taille du texte
             html.Div([
                 html.Label("Modifier la taille du texte :", 
                         **{"aria-label": "Slider pour changer la taille du texte du dashboard"}),
@@ -138,6 +139,7 @@ app.layout = dbc.Container([
         )
     ]),
     html.Hr(),
+    # section pour sélectionner un client et visualiser ses données
     dbc.Row([
         dbc.Col([
             html.Div(
@@ -162,8 +164,8 @@ app.layout = dbc.Container([
            className="dash-col", 
            style={'margin': 'auto', 'display': 'flex', 'flexDirection': 'column', 'alignItems': 'stretch'}
         ),
-        
         # new col
+        # section pour obtenir une prédiction
         dbc.Col([
             html.Div(
                 html.H3("Probabilité de défaut et statut du prêt"),
@@ -185,6 +187,7 @@ app.layout = dbc.Container([
            style={'margin-top': 0, 'margin-left': 'auto', 'margin-right': 'auto', 'margin-bottom': 'auto',
                 'display': 'flex', 'flexDirection': 'column', 'alignItems': 'stretch'}
         ),
+        # troisième colonne du premier row; graphique de l'explication locale lime
         dbc.Col([
             html.Div(
                 html.H3("Explication locale (LIME)"),
@@ -211,6 +214,7 @@ app.layout = dbc.Container([
     ], justify="around", align="start"),
     html.Hr(),
     # new row
+    # Nouvelle section permettant de modifier les données du clients et rafraîchir la prédiction
     dbc.Row([
         dbc.Col([
             html.Div(
@@ -287,6 +291,7 @@ app.layout = dbc.Container([
                         className='btn btn-dark w-100', n_clicks=0),
         ], width=3, xs=12, sm=12, md=12, lg=3, className="dash-col"),
         # new col
+        # colonne du second row dans laquelle s'affiche les résultats de la prédction rafraichie
         dbc.Col([
             html.Div(
                 html.H3("Résultats après modification"),
@@ -295,6 +300,7 @@ app.layout = dbc.Container([
             html.Div(id='modified-api-output', **{"aria-label": "Résultats de prédiction mis à jour"})
         ], width=3, xs=12, sm=12, md=12, lg=3, className="dash-col"),
         # new col
+        # graphique lime rafraîchi
         dbc.Col([
             html.Div(
                 html.H3("Explication locale (LIME) après modifications"),
@@ -305,7 +311,10 @@ app.layout = dbc.Container([
     ]),
     html.Hr(),
     # new row
+    # nouvelle section permettant de comparer les données du client sélectionné à celles des autres clients
     dbc.Row([
+        # colonne du troisième row, permet d'ajuster les critères de similarité si l'utilisateur souhaite comparer
+        # les données du client sélectionné à celles d'un groupe de clients similaires
         dbc.Col([
             html.Div(
                 html.H3("Critères de similarité"),
@@ -359,6 +368,7 @@ app.layout = dbc.Container([
             ], style={'display': 'flex', 'flexDirection': 'column', 'gap': '10px'})
         ], width=3, xs=12, sm=12, md=12, lg=3, className="dash-col"),
         dbc.Col([
+            # colonne ou s'affiche l'histogramme / graphique de comparaison
             html.Div(
                 html.H3("Comparaison avec d'autres clients"),
                 **{"aria-label": "Graphique de comparaison"}
@@ -415,6 +425,7 @@ app.layout = dbc.Container([
     ], justify="around", align="start"),
     html.Hr(),
     # new row
+    # nouvelle section pour explorer les données clients de façon plus générale
     dbc.Row([
         dbc.Col([
             # Graphique d’analyse bi-variée nuage de points
@@ -493,6 +504,7 @@ app.layout = dbc.Container([
         ], width=6, xs=12, sm=12, md=12, lg=6, className="dash-col")  # end of col
     ], justify="around", align="start"),  # end of row
     html.Hr(),
+    # dernièr row / section permettant au chargé de clientèle d'obtenir une définition des variables les plus importantes
     dbc.Row([
         dbc.Col(
             # Définition des variables
@@ -559,13 +571,15 @@ app.layout = dbc.Container([
             width=12, style={'textAlign': 'left'}
         )
     ])
-
-
+    
 ], id="main-content") # end of layout
 
 
 
-# Fonction pour appeler l'API
+#--------------------------- Callbacks et fonctions associées ---------------------------------------
+
+
+# fonction pour appeler l'API
 def call_api(client_data):
     headers = {
         "Content-Type": "application/json",
@@ -573,11 +587,13 @@ def call_api(client_data):
     }
     response = requests.post(API_URL, json=client_data, headers=headers)
     if response.status_code == 200:
-        return response.json()  # Renvoie les résultats sous forme de dictionnaire
+        return response.json()  # les résultats sont renvoyés au format json
     else:
         return {"error": f"Erreur API : {response.status_code}"}
 
-# Callback pour afficher les informations descriptives du client
+#----------------------------------------------------------------------------------------------------
+
+# Callback et fonction pour afficher les informations descriptives du client
 @callback(
     Output('client-info', 'children'),
     Input('client-id-dropdown', 'value')
@@ -631,7 +647,9 @@ def display_client_info(client_id):
         ])
 ])
 
-# Callback pour obtenir les prédictions ET générer le graphique LIME
+#----------------------------------------------------------------------------------------------------
+
+# Callback pour obtenir les prédictions et générer le graphique LIME
 @callback(
     [Output('api-output', 'children'),  # Résultats des prédictions
      Output('lime-image', 'src')],     # Graphique LIME
@@ -690,7 +708,10 @@ def get_predictions_and_lime_graph(n_clicks, client_id):
     # Si le bouton n'a pas encore été cliqué, ne rien afficher
     return "", None
 
+#----------------------------------------------------------------------------------------------------
 
+# callback et fonction pour la section permettant de comparer les données du client
+# sélectionné à celles de l'ensemble des clients ou d'un groupe de clients similaires
 @callback(
     Output('comparison-graph', 'figure'),
     [Input('feature-dropdown', 'value'),
@@ -715,7 +736,7 @@ def update_comparison_graph(selected_feature, group_filter, client_id, age_toler
 
     client_value = df[df['SK_ID_CURR'] == client_id][selected_feature].values[0]
 
-    # Conversion pour les binaires
+    # conversion pour les variables binaires
     if df[selected_feature].dtype == 'bool':
         similar_clients[selected_feature] = similar_clients[selected_feature].map({True: 1, False: 0})
         client_value = 1 if client_value else 0
@@ -728,7 +749,7 @@ def update_comparison_graph(selected_feature, group_filter, client_id, age_toler
         color_discrete_sequence=['blue']
     )
 
-    # Options spécifiques pour les binaires
+    # options spécifiques pour les binaires
     if df[selected_feature].dtype == 'bool':
         fig.update_layout(
             xaxis = dict(
@@ -749,7 +770,7 @@ def update_comparison_graph(selected_feature, group_filter, client_id, age_toler
             margin={'l': 20, 'r': 20, 't': 30, 'b': 30}
         )
     
-     # Ajouter la ligne verticale pour représenter la valeur du client
+     # Ajouter la ligne verticale rouge qui situe le client sélectionné sur le graphique
     fig.add_vline(
         x=client_value,
         line_dash="dot",
@@ -760,9 +781,12 @@ def update_comparison_graph(selected_feature, group_filter, client_id, age_toler
     )
     return fig
 
+#----------------------------------------------------------------------------------------------------
 
+# callback + fonction permettant de gérer la modification des données du client sélectionné, la prédiction rafraîchie
+# et la mise à jour du graphique lime
 @callback(
-    [Output('modified-api-output', 'children'),  # Résultats des prédictions mis à jour
+    [Output('modified-api-output', 'children'),  # résultats des prédictions mis à jour
      Output('modified-lime-image', 'children')],  # Graphique LIME mis à jour
     [Input('refresh-prediction-button', 'n_clicks')],  # Bouton pour rafraîchir
     [State('client-id-dropdown', 'value'),          # ID du client sélectionné
@@ -847,13 +871,16 @@ def update_client_data(n_clicks, client_id, age, credit_term, credit_annuity, lo
     return "", None
 
 
+#----------------------------------------------------------------------------------------------------
+
+# callbacks et fonctions associées pour la visuslisation des données client via nuage de points et boxplot
 @callback(
     Output("scatterplot-graph", "figure"),
     [Input("scatterplot-feature-1", "value"),
      Input("scatterplot-feature-2", "value")]
 )
 def update_scatterplot_graph(feature1, feature2):
-    # Récupérer uniquement les colonnes numériques
+    # récupérer uniquement les colonnes numériques
     data = df_no_id[scatter_plot_vars]
     fig = px.scatter(
         data, 
@@ -889,7 +916,9 @@ def update_boxplot_graph(feature1, feature2):
     return fig
 
 
+#----------------------------------------------------------------------------------------------------
 
+# callback et fonction qui permettent d'ajuster la taille du texte via un slider
 @callback(
     Output('main-content', 'style'),  # Applique le style à tout le conteneur
     Input('text-size-slider', 'value')  # Taille choisie par l'utilisateur
@@ -902,11 +931,11 @@ def update_text_size(font_size):
     }
 
 
-# Lancement de l'application
+# Lancement de l'application en production
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=8080, debug=False)
     
 
-# # Lancement de l'application
+# # Lancement de l'application en mode développement
 # if __name__ == '__main__':
 #     app.run(debug=True)
