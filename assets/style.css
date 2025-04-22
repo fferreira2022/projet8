@@ -33,3 +33,16 @@ h6{
 .text-black {
     color: black;
 }
+
+.custom-slider .rc-slider-track {
+    background-color: #333333;
+}
+
+.custom-slider .rc-slider-handle {
+    border-color: #003366; /* Couleur du curseur */
+    background-color: #003366;
+}
+
+.custom-slider .rc-slider-rail {
+    background-color: #666666; /* Couleur de la barre inactive */
+}

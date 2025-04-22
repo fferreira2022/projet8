@@ -132,7 +132,8 @@ app.layout = dbc.Container([
                     step=2,
                     value=16,
                     marks={10: '10px', 20: '20px', 30: '30px'},
-                    tooltip={"placement": "bottom", "always_visible": True}
+                    tooltip={"placement": "bottom", "always_visible": True},
+                    className="custom-slider"
                 ),
             ], style={'width': '100%', 'marginBottom': '20px', 'padding': '10px'}), 
             width=12, style={'textAlign': 'center'}
