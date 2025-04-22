@@ -168,7 +168,7 @@ app.layout = dbc.Container([
         # section pour obtenir une prédiction
         dbc.Col([
             html.Div(
-                html.H3("Probabilité de défaut et statut du prêt"),
+                html.H3("Probabilité de défaut"),
                 **{"aria-label": "Section des prédictions renvoyées par l'API"}
             ),
             html.Div(
